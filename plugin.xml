@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2015 Jihyun Lee. All rights reserved. -->
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="com.hellojihyun.cordova.plugin.Muse"
+    version="1.0.0">
+
+    <name>Muse Plugin for Cordova iOS</name>
+    <description>Muse</description>
+    <license>Apache 2.0</license>
+    <keywords>Muse</keywords>	
+    
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+	
+    <asset src="www/Muse.js" target="plugins/Muse.js" />
+
+	<js-module src="www/Muse.js" name="Muse">
+    	<clobbers target="window.Muse" />
+	</js-module>
+	
+    <!-- ios -->
+    <platform name="ios">
+        <!-- feature tag in config.xml -->
+        <config-file target="config.xml" parent="/widget">
+          <feature name="Muse">
+            <param name="ios-package" value="CDVMuse"/>
+          </feature>
+        </config-file>
+        
+        <header-file src="src/ios/CDVMuse.h" />
+        <source-file src="src/ios/CDVMuse.m"/>
+        
+        <header-file src="src/ios/Muse/include/Muse.h" />
+        <header-file src="src/ios/Muse/include/EAAccessory+IXNAccessoryMuse.h" />
+        <header-file src="src/ios/Muse/include/IXNAccelerometer.h" />
+        <header-file src="src/ios/Muse/include/IXNAnnotationData.h" />
+        <header-file src="src/ios/Muse/include/IXNAnnotationFormat.h" />
+        <header-file src="src/ios/Muse/include/IXNBattery.h" />
+        <header-file src="src/ios/Muse/include/IXNComputingDeviceConfiguration.h" />
+        <header-file src="src/ios/Muse/include/IXNConnectionState.h" />
+        <header-file src="src/ios/Muse/include/IXNDrlRef.h" />
+        <header-file src="src/ios/Muse/include/IXNDspData.h" />
+        <header-file src="src/ios/Muse/include/IXNEeg.h" />
+        <header-file src="src/ios/Muse/include/IXNLibMuseVersion.h" />
+        <header-file src="src/ios/Muse/include/IXNMessageType.h" />
+        <header-file src="src/ios/Muse/include/IXNMuse.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseArtifactPacket.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseConfiguration.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseConnectionListener.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseConnectionPacket.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseDataListener.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseDataPacket.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseDataPacketType.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseFile.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseFileFactory.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseFileIos.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseFileReader.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseFileWriter.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseManager.h" />
+        <header-file src="src/ios/Muse/include/IXNMusePreset.h" />
+        <header-file src="src/ios/Muse/include/IXNMuseVersion.h" />
+        <header-file src="src/ios/Muse/include/IXNNotchFrequency.h" />
+        <header-file src="src/ios/Muse/include/IXNSenderInformation.h" />
+        <source-file src="src/ios/Muse/libMuse.a" framework="true" />
+
+        <!-- frameworks -->
+        <framework src="ExternalAccessory.framework" />
+        <framework src="libc++.dylib" />
+        <framework src="libMuse.a" />
+    </platform>
+</plugin>
