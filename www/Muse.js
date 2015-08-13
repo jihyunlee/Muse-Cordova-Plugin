@@ -40,9 +40,4 @@ Muse.prototype.unregisterDataListener = function(dataType, successCallback, fail
 	exec(successCallback, failureCallback, this.serviceName, "unregisterDataListener", [dataType]);
 }
 
-Muse.prototype.getEEG = function(successCallback, failureCallback)
-{
-	exec(successCallback, failureCallback, this.serviceName, "getEEG", []);
-}
-
 module.exports = Muse;

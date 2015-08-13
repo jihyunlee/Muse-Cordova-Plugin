@@ -144,8 +144,8 @@
 //							   type:IXNMuseDataPacketTypeThetaScore];
 //	[self.muse registerDataListener:self
 //							   type:IXNMuseDataPacketTypeGammaScore];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeHorseshoe];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeHorseshoe];
 //	[self.muse registerDataListener:self
 //							   type:IXNMuseDataPacketTypeArtifacts];
 //	[self.muse registerDataListener:self
@@ -178,6 +178,30 @@
 			[self.muse registerDataListener:self
 									   type:IXNMuseDataPacketTypeMellow];
 		}
+		else if ([type isEqualToString:@"horseshoe"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeHorseshoe];
+		}
+		else if ([type isEqualToString:@"alphaRelative"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeAlphaRelative];
+		}
+		else if ([type isEqualToString:@"betaRelative"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeBetaRelative];
+		}
+		else if ([type isEqualToString:@"deltaRelative"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeDeltaRelative];
+		}
+		else if ([type isEqualToString:@"thetaRelative"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeThetaRelative];
+		}
+		else if ([type isEqualToString:@"gammaRelative"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeGammaRelative];
+		}
 	}
 }
 
@@ -203,7 +227,13 @@
 {
 	NSString *str = [[NSString alloc] init];
 	for (NSString *item in packet.values) {
-		str = [str stringByAppendingString:[NSString stringWithFormat:@"%f,", [item doubleValue]]];
+		double value = [item doubleValue];
+		if(isnan(value)) {
+			str = [str stringByAppendingString:@","];
+		}
+		else {
+			str = [str stringByAppendingString:[NSString stringWithFormat:@"%f,", value]];
+		}
 	}
 	
 	NSMutableArray* packets = [[NSMutableArray alloc] init]; //[NSMutableArray arrayWithCapacity:1];
@@ -247,18 +277,23 @@
 			break;
 		case IXNMuseDataPacketTypeAlphaRelative:
 			NSLog(@"received::AlphaRelative %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"alphaRelative"]];
 			break;
 		case IXNMuseDataPacketTypeBetaRelative:
-			NSLog(@"received::BetaRelative %@", str);
+//			NSLog(@"received::BetaRelative %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"betaRelative"]];
 			break;
 		case IXNMuseDataPacketTypeDeltaRelative:
-			NSLog(@"received::DeltaRelative %@", str);
+//			NSLog(@"received::DeltaRelative %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"deltaRelative"]];
 			break;
 		case IXNMuseDataPacketTypeThetaRelative:
-			NSLog(@"received::ThetaRelative %@", str);
+//			NSLog(@"received::ThetaRelative %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"thetaRelative"]];
 			break;
 		case IXNMuseDataPacketTypeGammaRelative:
-			NSLog(@"received::GammaRelative %@", str);
+//			NSLog(@"received::GammaRelative %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"gammaRelative"]];
 			break;
 		case IXNMuseDataPacketTypeAlphaScore:
 			NSLog(@"received::AlphaScore %@", str);
@@ -277,16 +312,17 @@
 			break;
 		case IXNMuseDataPacketTypeHorseshoe:
 //			NSLog(@"received::Horseshoe %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"horseshoe"]];
 			break;
 		case IXNMuseDataPacketTypeArtifacts:
 			NSLog(@"received::Artifacts %@", str);
 			break;
 		case IXNMuseDataPacketTypeMellow:
-			NSLog(@"received::Mellow %@", str);
+//			NSLog(@"received::Mellow %@", str);
 			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"mellow"]];
 			break;
 		case IXNMuseDataPacketTypeConcentration:
-			NSLog(@"received::Concentration %@", str);
+//			NSLog(@"received::Concentration %@", str);
 			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"concentration"]];
 			break;
 		case IXNMuseDataPacketTypeTotal:
@@ -303,6 +339,7 @@
 	if ([packets count] > 0) {
 		CDVPluginResult* pluginResult = nil;
 		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:packets];
+		[pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
 		[self.commandDelegate sendPluginResult:pluginResult callbackId:_dataCallbackId];
 	}
 }
