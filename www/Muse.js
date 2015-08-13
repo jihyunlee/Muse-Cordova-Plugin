@@ -30,12 +30,12 @@ Muse.prototype.init = function(successCallback, failureCallback)
 	exec(successCallback, failureCallback, this.serviceName, "init", []);
 }
 
-Muse.prototype.registerDataListener = function(successCallback, failureCallback)
+Muse.prototype.registerDataListener = function(dataType, successCallback, failureCallback)
 {
 	exec(successCallback, failureCallback, this.serviceName, "registerDataListener", [dataType]);
 }
 
-Muse.prototype.unregisterDataListener = function(successCallback, failureCallback)
+Muse.prototype.unregisterDataListener = function(dataType, successCallback, failureCallback)
 {
 	exec(successCallback, failureCallback, this.serviceName, "unregisterDataListener", [dataType]);
 }

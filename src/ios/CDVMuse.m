@@ -102,56 +102,52 @@
 	
 	[self.muse registerDataListener:self
 							   type:IXNMuseDataPacketTypeBattery];
-    [self.muse registerDataListener:self
-                               type:IXNMuseDataPacketTypeAccelerometer];
+//    [self.muse registerDataListener:self
+//                               type:IXNMuseDataPacketTypeAccelerometer];
 	[self.muse registerDataListener:self
 							   type:IXNMuseDataPacketTypeEeg];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeDroppedAccelerometer];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeDroppedEeg];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeQuantization];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeDrlRef];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeAlphaAbsolute];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeBetaAbsolute];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeDeltaAbsolute];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeThetaAbsolute];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeGammaAbsolute];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeAlphaRelative];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeBetaRelative];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeDeltaRelative];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeThetaRelative];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeGammaRelative];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeAlphaScore];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeBetaScore];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeDeltaScore];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeThetaScore];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeGammaScore];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeDroppedAccelerometer];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeDroppedEeg];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeQuantization];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeDrlRef];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeAlphaAbsolute];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeBetaAbsolute];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeDeltaAbsolute];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeThetaAbsolute];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeGammaAbsolute];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeAlphaRelative];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeBetaRelative];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeDeltaRelative];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeThetaRelative];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeGammaRelative];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeAlphaScore];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeBetaScore];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeDeltaScore];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeThetaScore];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeGammaScore];
 	[self.muse registerDataListener:self
 							   type:IXNMuseDataPacketTypeHorseshoe];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeArtifacts];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeMellow];
-	[self.muse registerDataListener:self
-							   type:IXNMuseDataPacketTypeConcentration];
+//	[self.muse registerDataListener:self
+//							   type:IXNMuseDataPacketTypeArtifacts];
 //	[self.muse registerDataListener:self
 //							   type:IXNMuseDataPacketTypeTotal];
 
@@ -168,11 +164,21 @@
 
 - (void)registerDataListener:(CDVInvokedUrlCommand *)command
 {
-	CDVPluginResult* pluginResult = nil;
+	NSLog(@"CDVMuse::registerDataListener");
 	
-	pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-	
-	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+	_dataCallbackId = [command.callbackId copy];
+
+	NSArray *dataTypes = [command.arguments objectAtIndex:0];
+	for (id type in dataTypes) {
+		if ([type isEqualToString:@"concentration"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeConcentration];
+		}
+		else if ([type isEqualToString:@"mellow"]) {
+			[self.muse registerDataListener:self
+									   type:IXNMuseDataPacketTypeMellow];
+		}
+	}
 }
 
 - (void)unregisterDataListener:(CDVInvokedUrlCommand *)command
@@ -199,16 +205,18 @@
 	for (NSString *item in packet.values) {
 		str = [str stringByAppendingString:[NSString stringWithFormat:@"%f,", [item doubleValue]]];
 	}
+	
+	NSMutableArray* packets = [[NSMutableArray alloc] init]; //[NSMutableArray arrayWithCapacity:1];
 
     switch (packet.packetType) {
         case IXNMuseDataPacketTypeBattery:
-            NSLog(@"received::Battery %@", str);
+//            NSLog(@"received::Battery %@", str);
             break;
         case IXNMuseDataPacketTypeAccelerometer:
-			NSLog(@"received::Accelerometer %@", str);
+//			NSLog(@"received::Accelerometer %@", str);
             break;
 		case IXNMuseDataPacketTypeEeg:
-			NSLog(@"received::Eeg %@", str);
+//			NSLog(@"received::Eeg %@", str);
 			break;
 		case IXNMuseDataPacketTypeDroppedAccelerometer:
 			NSLog(@"received::DroppedAccelerometer %@", str);
@@ -268,16 +276,18 @@
 			NSLog(@"received::GammaScore %@", str);
 			break;
 		case IXNMuseDataPacketTypeHorseshoe:
-			NSLog(@"received::Horseshoe %@", str);
+//			NSLog(@"received::Horseshoe %@", str);
 			break;
 		case IXNMuseDataPacketTypeArtifacts:
 			NSLog(@"received::Artifacts %@", str);
 			break;
 		case IXNMuseDataPacketTypeMellow:
 			NSLog(@"received::Mellow %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"mellow"]];
 			break;
 		case IXNMuseDataPacketTypeConcentration:
 			NSLog(@"received::Concentration %@", str);
+			[packets addObject:[NSDictionary dictionaryWithObject:str forKey:@"concentration"]];
 			break;
 		case IXNMuseDataPacketTypeTotal:
 			NSLog(@"received::Total %@", str);
@@ -289,6 +299,12 @@
 			NSLog(@"received::UNDEFINED %@", str);
             break;
     }
+	
+	if ([packets count] > 0) {
+		CDVPluginResult* pluginResult = nil;
+		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:packets];
+		[self.commandDelegate sendPluginResult:pluginResult callbackId:_dataCallbackId];
+	}
 }
 
 - (void)receiveMuseArtifactPacket:(IXNMuseArtifactPacket *)packet

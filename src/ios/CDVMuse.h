@@ -27,6 +27,7 @@
 
 @interface CDVMuse : CDVPlugin <IXNMuseDataListener, IXNMuseConnectionListener> {
 	NSString* _initCallbackId;
+	NSString* _dataCallbackId;
 }
 
 @property (strong, nonatomic) id<IXNMuse> muse;
