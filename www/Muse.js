@@ -27,6 +27,7 @@ var Muse = function() {
 
 Muse.prototype.init = function(successCallback, failureCallbac)
 {
+	console.log('Muse::init')
 	exec(successCallback, failureCallback, this.serviceName, "init", []);
 }
 
