@@ -50,12 +50,19 @@
     // to resume connection if we disconnected in applicationDidEnterBakcground::
     // else if (self.muse.getConnectionState == IXNConnectionStateDisconnected)
     //     [self.muse runAsynchronously];
+}
+
+- (void)init:(CDVInvokedUrlCommand *)command
+{
+	NSLog(@"CDVMuse::init");
 	
-    [self.manager addObserver:self
-                   forKeyPath:[self.manager connectedMusesKeyPath]
-                      options:(NSKeyValueObservingOptionNew |
-                               NSKeyValueObservingOptionInitial)
-                      context:nil];
+	_initCallbackId = [command.callbackId copy];
+
+	[self.manager addObserver:self
+				   forKeyPath:[self.manager connectedMusesKeyPath]
+					  options:(NSKeyValueObservingOptionNew |
+							   NSKeyValueObservingOptionInitial)
+					  context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -64,13 +71,22 @@
                        context:(void *)context
 {
 	NSLog(@"CDVMuse::observeValueForKeyPath");
-
+	
     if ([keyPath isEqualToString:[self.manager connectedMusesKeyPath]]) {
         NSSet *connectedMuses = [change objectForKey:NSKeyValueChangeNewKey];
         if (connectedMuses.count) {
+			CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+			[self.commandDelegate sendPluginResult:pluginResult callbackId:_initCallbackId];
+			_initCallbackId = nil;
+
             [self startWithMuse:[connectedMuses anyObject]];
+			return;
         }
-    }
+	}
+
+	CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"connected device not found"];
+	[self.commandDelegate sendPluginResult:pluginResult callbackId:_initCallbackId];
+	_initCallbackId = nil;
 }
 
 - (void)startWithMuse:(id<IXNMuse>)muse
@@ -148,6 +164,24 @@
 	NSLog(@"CDVMuse::reconnectToMuse");
 
   [self.muse runAsynchronously];
+}
+
+- (void)registerDataListener:(CDVInvokedUrlCommand *)command
+{
+	CDVPluginResult* pluginResult = nil;
+	
+	pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+	
+	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)unregisterDataListener:(CDVInvokedUrlCommand *)command
+{
+	CDVPluginResult* pluginResult = nil;
+	
+	pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+	
+	[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)getEEG:(CDVInvokedUrlCommand *)command

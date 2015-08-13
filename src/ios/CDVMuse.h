@@ -25,15 +25,19 @@
 
 @class CDVMuse;
 
-@interface CDVMuse : CDVPlugin <IXNMuseDataListener, IXNMuseConnectionListener>
+@interface CDVMuse : CDVPlugin <IXNMuseDataListener, IXNMuseConnectionListener> {
+	NSString* _initCallbackId;
+}
 
 @property (strong, nonatomic) id<IXNMuse> muse;
 
 - (void)reconnectToMuse;
 
+- (void)init:(CDVInvokedUrlCommand *)command;
+- (void)registerDataListener:(CDVInvokedUrlCommand *)command;
+- (void)unregisterDataListener:(CDVInvokedUrlCommand *)command;
 - (void)getEEG:(CDVInvokedUrlCommand *)command;
 
-// TGAccessoryDelegate protocol methods
 - (void)receiveMuseDataPacket:(IXNMuseDataPacket *)packet;
 - (void)receiveMuseArtifactPacket:(IXNMuseArtifactPacket *)packet;
 - (void)receiveMuseConnectionPacket:(IXNMuseConnectionPacket *)packet;
