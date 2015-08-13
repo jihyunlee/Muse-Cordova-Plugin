@@ -25,17 +25,17 @@ var Muse = function() {
 	this.serviceName = "Muse";
 };
 
-Muse.prototype.init = function(successCallback, failureCallbac)
+Muse.prototype.init = function(successCallback, failureCallback)
 {
-	exec(successCallback, failureCallback, this.serviceName, "getEEG", []);
+	exec(successCallback, failureCallback, this.serviceName, "init", []);
 }
 
-Muse.prototype.registerDataListener = function(successCallback, failureCallbac)
+Muse.prototype.registerDataListener = function(successCallback, failureCallback)
 {
 	exec(successCallback, failureCallback, this.serviceName, "registerDataListener", [dataType]);
 }
 
-Muse.prototype.unregisterDataListener = function(successCallback, failureCallbac)
+Muse.prototype.unregisterDataListener = function(successCallback, failureCallback)
 {
 	exec(successCallback, failureCallback, this.serviceName, "unregisterDataListener", [dataType]);
 }
