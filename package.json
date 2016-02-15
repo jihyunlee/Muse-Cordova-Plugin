@@ -1,0 +1,28 @@
+{
+  "name": "cordova-muse-plugin",
+  "version": "0.9.0",
+  "description": "",
+  "cordova": {
+    "id": "cordova-muse-plugin",
+    "platforms": [
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jihyunlee/Muse-Cordova-Plugin.git"
+  },
+  "keywords": [
+    "cordova-ios"
+  ],
+  "engines": [{
+    "name": "cordova",
+    "version": ">=3.0.0"
+  }],
+  "author": "Jihyun Lee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jihyunlee/Muse-Cordova-Plugin/issues"
+  },
+  "homepage": "https://github.com/jihyunlee/Muse-Cordova-Plugin#readme"
+}
